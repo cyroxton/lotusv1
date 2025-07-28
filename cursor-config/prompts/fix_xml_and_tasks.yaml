@@ -1,0 +1,56 @@
+prompt_name: "Fix XML Syntax and Gradle Tasks Configuration"
+description: "Correct XML syntax errors in strings.xml and configure Gradle tasks for Ctrl+T in the Lotus music player project."
+context: |
+  Project: Lotus music player for Android
+  - Main files: app/src/main/res/values-fr/strings.xml, cursor-config/tasks.json, cursor-config/keybindings.json
+  - UI framework: Jetpack Compose
+  - Gradle version: 8.11.1
+  - Issues to fix:
+    - XML syntax error in values-fr/strings.xml at line 19 (Resource and asset merger: "string" element must be followed by attribute specifications, ">", or "/>").
+    - Ctrl+T not properly triggering Gradle tasks (build, test, run).
+instructions: |
+  - In app/src/main/res/values-fr/strings.xml:
+    1. Open the file and go to line 19.
+    2. Fix the XML syntax error by ensuring the <string> tag has a valid name attribute and is properly closed (e.g., <string name="missing_string">Text</string>).
+    3. Verify that all <string> tags are well-formed and saved in UTF-8 encoding.
+  - In cursor-config/tasks.json:
+    1. Ensure the file contains Gradle tasks for build, test, and run using gradlew.bat for Windows.
+    2. Example configuration:
+       {
+           "version": "2.0.0",
+           "tasks": [
+               {
+                   "label": "build",
+                   "type": "shell",
+                   "command": "gradlew.bat build",
+                   "problemMatcher": []
+               },
+               {
+                   "label": "test",
+                   "type": "shell",
+                   "command": "gradlew.bat test",
+                   "problemMatcher": []
+               },
+               {
+                   "label": "run",
+                   "type": "shell",
+                   "command": "gradlew.bat installDebug",
+                   "problemMatcher": []
+               }
+           ]
+       }
+  - In cursor-config/keybindings.json:
+    1. Ensure Ctrl+T is bound to "workbench.action.tasks.runTask".
+    2. Example configuration:
+       [
+           {
+               "key": "ctrl+t",
+               "command": "workbench.action.tasks.runTask"
+           }
+       ]
+  - Run ./gradlew build to verify the fixes.
+  - Generate a report in REPORT_TASKS_FIXES.md summarizing the changes and build status.
+  - Ensure compatibility with Jetpack Compose and Gradle 8.11.1.
+parameters:
+  temperature: 0.2
+  max_tokens: 512
