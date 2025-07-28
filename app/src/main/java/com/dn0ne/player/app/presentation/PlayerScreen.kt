@@ -513,6 +513,9 @@ fun PlayerScreen(
                                         )
                                     )
                                 },
+                                onToggleFavorite = {
+                                    viewModel.onEvent(PlayerScreenEvent.OnToggleFavorite(it))
+                                },
                                 onPlayNextClick = {
                                     viewModel.onEvent(PlayerScreenEvent.OnPlayNextClick(it))
                                 },
@@ -628,6 +631,9 @@ fun PlayerScreen(
                                         )
                                     )
                                 },
+                                onToggleFavorite = {
+                                    viewModel.onEvent(PlayerScreenEvent.OnToggleFavorite(it))
+                                },
                                 onPlayNextClick = {
                                     viewModel.onEvent(PlayerScreenEvent.OnPlayNextClick(it))
                                 },
@@ -716,7 +722,7 @@ fun PlayerScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.BottomCenter),
+                        .align(androidx.compose.ui.Alignment.BottomCenter),
                 ) {
                     val isPlayerExpanded by remember {
                         derivedStateOf { playbackState.isPlayerExpanded }
@@ -727,7 +733,7 @@ fun PlayerScreen(
                             onScrollToTopClick = onScrollToTopClick,
                             showLocateButton = showLocateButton,
                             onLocateClick = onLocateClick,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(androidx.compose.ui.Alignment.End)
                         )
                     }
 
@@ -1031,7 +1037,6 @@ fun MainPlayerScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 4.dp)
-                    .align(Alignment.BottomCenter)
             ) { state ->
                 when (state) {
                     TopBarContent.Default -> {
@@ -1107,7 +1112,6 @@ fun MainPlayerScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 48.dp)
-                                        .align(Alignment.Center)
                                 )
                             }
                         }
@@ -1119,6 +1123,7 @@ fun MainPlayerScreen(
                             searchFieldValue = ""
                         }
                         Box(
+                            contentAlignment = androidx.compose.ui.Alignment.Center,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             val focusRequester = remember {
@@ -1138,7 +1143,6 @@ fun MainPlayerScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 48.dp)
-                                    .align(Alignment.Center)
                                     .focusRequester(focusRequester)
                             )
 
@@ -1151,7 +1155,7 @@ fun MainPlayerScreen(
                                     showSearchField = false
                                     searchFieldValue = ""
                                 },
-                                modifier = Modifier.align(Alignment.CenterEnd)
+                                modifier = Modifier
                             ) {
                                 Icon(
                                     imageVector = Icons.Rounded.Close,
@@ -1174,7 +1178,7 @@ fun MainPlayerScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                                 IconButton(
                                     onClick = {
                                         isInSelectionMode = false

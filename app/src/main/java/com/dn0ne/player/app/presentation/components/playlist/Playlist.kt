@@ -62,6 +62,7 @@ fun Playlist(
     playlist: Playlist,
     currentTrack: Track?,
     onTrackClick: (Track, Playlist) -> Unit,
+    onToggleFavorite: (Track) -> Unit,
     onPlayNextClick: (Track) -> Unit,
     onAddToQueueClick: (List<Track>) -> Unit,
     onAddToPlaylistClick: (List<Track>) -> Unit,
@@ -348,6 +349,7 @@ fun Playlist(
                         } else playlist
                     )
                 },
+                onToggleFavorite = onToggleFavorite,
                 onPlayNextClick = onPlayNextClick,
                 onAddToQueueClick = { onAddToQueueClick(listOf(it)) },
                 onAddToPlaylistClick = { onAddToPlaylistClick(listOf(it)) },

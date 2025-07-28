@@ -82,6 +82,7 @@ fun MutablePlaylist(
     onRenamePlaylistClick: () -> Unit,
     onDeletePlaylistClick: () -> Unit,
     onTrackClick: (Track, Playlist) -> Unit,
+    onToggleFavorite: (Track) -> Unit,
     onPlayNextClick: (Track) -> Unit,
     onAddToQueueClick: (List<Track>) -> Unit,
     onAddToPlaylistClick: (List<Track>) -> Unit,
@@ -444,6 +445,7 @@ fun MutablePlaylist(
                                 } else playlist
                             )
                         },
+                        onToggleFavorite = { onToggleFavorite(track) },
                         onPlayNextClick = { onPlayNextClick(track) },
                         onAddToQueueClick = { onAddToQueueClick(listOf(track)) },
                         onAddToPlaylistClick = { onAddToPlaylistClick(listOf(track)) },

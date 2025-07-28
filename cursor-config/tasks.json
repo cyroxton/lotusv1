@@ -4,7 +4,7 @@
     {
       "label": "build",
       "type": "shell",
-      "command": "./gradlew build",
+      "command": ".\\gradlew.bat build",
       "group": {
         "kind": "build",
         "isDefault": true
@@ -20,7 +20,7 @@
     {
       "label": "test",
       "type": "shell",
-      "command": "./gradlew test",
+      "command": ".\\gradlew.bat test",
       "group": "test",
       "problemMatcher": ["$gradle"],
       "presentation": {
@@ -33,7 +33,7 @@
     {
       "label": "run",
       "type": "shell",
-      "command": "./gradlew installDebug",
+      "command": ".\\gradlew.bat installDebug",
       "group": "build",
       "problemMatcher": ["$gradle"],
       "presentation": {
@@ -46,14 +46,14 @@
     {
       "label": "clean",
       "type": "shell",
-      "command": "./gradlew clean",
+      "command": ".\\gradlew.bat clean",
       "group": "build",
       "problemMatcher": ["$gradle"]
     },
     {
       "label": "lint",
       "type": "shell",
-      "command": "./gradlew lint",
+      "command": ".\\gradlew.bat lint",
       "group": "build",
       "problemMatcher": ["$gradle"]
     }

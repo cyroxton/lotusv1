@@ -342,4 +342,6 @@
     <string name="copy_error">Copy error</string>
     <string name="select_all">Select all</string>
     <string name="favorites">Favorites</string>
+    <string name="language_supporting_text">Change app language</string>
+    <string name="language">Language</string>
 </resources>
