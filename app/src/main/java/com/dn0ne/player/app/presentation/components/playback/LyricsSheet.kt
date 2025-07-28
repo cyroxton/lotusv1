@@ -48,7 +48,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -76,6 +75,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.fastFirstOrNull
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dn0ne.player.R
 import com.dn0ne.player.app.presentation.components.topbar.LazyColumnWithCollapsibleTopBar
 import com.dn0ne.player.app.presentation.components.ProviderText
@@ -85,6 +86,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.math.PI
 import kotlin.math.sin
+import com.dn0ne.player.app.presentation.components.playback.PlaybackState
 
 @Composable
 fun LyricsSheet(
@@ -94,12 +96,19 @@ fun LyricsSheet(
     contentColor: Color,
     onBackClick: () -> Unit,
     onSeekTo: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: LyricsViewModel = viewModel()
 ) {
+    // Update the ViewModel with the external playbackStateFlow
+    LaunchedEffect(playbackStateFlow) {
+        viewModel.updatePlaybackState(playbackStateFlow.value)
+        // In a complete implementation, we would use viewModel.observeExternalPlaybackState(playbackStateFlow)
+    }
+    
     BackHandler {
         onBackClick()
     }
-    val playbackState by playbackStateFlow.collectAsState()
+    val playbackState by playbackStateFlow.collectAsStateWithLifecycle()
     val isLoadingLyrics by remember {
         derivedStateOf {
             playbackState.isLoadingLyrics
@@ -461,7 +470,7 @@ fun SyncedLyricsLine(
     onBecomeCurrent: (textHeight: Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val position by positionFlow.collectAsState(0)
+    val position by positionFlow.collectAsStateWithLifecycle(initialValue = 0L)
     var textHeight by remember {
         mutableFloatStateOf(0f)
     }
@@ -550,7 +559,7 @@ fun BubblesLine(
     nextTime: Int,
     modifier: Modifier = Modifier
 ) {
-    val position by positionFlow.collectAsState(-1)
+    val position by positionFlow.collectAsStateWithLifecycle(initialValue = -1L)
     var bubblesContainerHeight by remember {
         mutableFloatStateOf(0f)
     }

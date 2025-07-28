@@ -13,6 +13,7 @@ context: |
     - Lint found 240 errors and 97 warnings (first failure at LyricsSheet.kt:254, already fixed).
     - Build fails with ./gradlew.bat build due to strict lint rules.
     - Lint report: C:\Users\emsjo\Documents\VETERENT\DEV\APK\lotus-masterv1\app\build\intermediates\lint_intermediate_text_report\debug\lintReportDebug\lint-results-debug.txt
+  - New update: REPORT_FRENCH_TRANSLATION.md added French translations to values-fr/strings.xml, resolving missing translations issue.
 instructions: |
   - Analyze the lint report (lint-results-debug.txt) to identify all errors (excluding FlowOperatorInvokedInComposition already fixed).
   - Fix the top 10 lint errors with priority on:
@@ -35,6 +36,9 @@ instructions: |
     - Structural improvements applied.
     - Build status (success/failure).
   - Ensure compatibility with Jetpack Compose and Gradle 8.11.1.
+  - Fix specific compilation errors:
+  1. In app/src/main/java/com/dn0ne/player/app/presentation/components/playback/LyricsSheet.kt:
+     - Define LyricsViewModel if not existing, with playbackStateFlow and positionFlow:
 parameters:
   temperature: 0.2
   max_tokens: 1024

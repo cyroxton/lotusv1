@@ -193,34 +193,34 @@ fun Queue(
                                 searchFieldValue = ""
                             }
                             Box(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                val focusRequester = remember {
-                                    FocusRequester()
-                                }
-                                SearchField(
-                                    value = searchFieldValue,
-                                    onValueChange = {
-                                        searchFieldValue = it.trimStart()
-                                    },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 48.dp)
-                                        .align(Alignment.Center)
-                                        .focusRequester(focusRequester)
-                                )
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                val focusRequester = remember {
+                    FocusRequester()
+                }
+                SearchField(
+                    value = searchFieldValue,
+                    onValueChange = {
+                        searchFieldValue = it.trimStart()
+                    },
+                    onClearClick = { searchFieldValue = "" },
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .focusRequester(focusRequester)
+                )
 
-                                LaunchedEffect(Unit) {
-                                    focusRequester.requestFocus()
-                                }
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                }
 
-                                IconButton(
-                                    onClick = {
-                                        showSearchField = false
-                                        searchFieldValue = ""
-                                    },
-                                    modifier = Modifier.align(Alignment.CenterEnd)
-                                ) {
+                IconButton(
+                    onClick = {
+                        showSearchField = false
+                        searchFieldValue = ""
+                    },
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                ) {
                                     Icon(
                                         imageVector = Icons.Rounded.Close,
                                         contentDescription = context.resources.getString(
