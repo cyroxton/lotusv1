@@ -1,0 +1,21 @@
+prompt_name: "Fix Kotlin Alignment Issue and Verify Build"
+description: "Correct the Kotlin compilation error related to Modifier.align in PlayerScreen.kt and ensure the build succeeds."
+context: |
+  Project: Lotus music player for Android
+  - Main file: app/src/main/java/com/dn0ne/player/app/presentation/PlayerScreen.kt
+  - UI framework: Jetpack Compose
+  - Gradle version: 8.11.1
+  - Issue to fix:
+    - Compilation error at PlayerScreen.kt:1116:42: 'fun Modifier.align(alignment: Alignment): Modifier' cannot be called with an implicit receiver.
+instructions: |
+  - In app/src/main/java/com/dn0ne/player/app/presentation/PlayerScreen.kt:
+    1. Open the file and go to line 1116.
+    2. Fix the syntax error by ensuring Modifier.align is called with an explicit receiver (e.g., replace align(Alignment.Center) with Modifier.align(Alignment.Center)).
+    3. Verify the surrounding code to ensure compatibility with Jetpack Compose (e.g., check if it's within a Box, Column, or Row scope).
+    4. Suggest a correction if the context requires adjusting the composable structure.
+  - Run ./gradlew build to verify the fix.
+  - Generate a report in REPORT_KOTLIN_FIXES.md summarizing the changes and build status.
+  - Ensure compatibility with Jetpack Compose and Gradle 8.11.1.
+parameters:
+  temperature: 0.2
+  max_tokens: 512
