@@ -1,0 +1,33 @@
+prompt_name: "Verify Language Selection, Favorites System, and Search Bar Visibility"
+description: "Check if the language selection, favorites system, and always-visible search bar are correctly implemented in the Lotus music player project."
+context: |
+  Project: Lotus music player for Android
+  - Main files: app/src/main/java/com/example/lotus/MainActivity.kt, PlaybackService.kt
+  - UI framework: Jetpack Compose
+  - Dependencies: Android MediaPlayer, MediaSessionCompat, Kotlin coroutines
+  - Expected features:
+    - Language selection: Users can switch app language (e.g., English, French) with persistence.
+    - Favorites system: Users can mark songs as favorites and access them in a dedicated list.
+    - Always-visible search bar: Search bar remains visible in all main screens.
+instructions: |
+  - Analyze MainActivity.kt and related files for:
+    1. Language selection:
+       - Check for a language picker UI component (e.g., dropdown or settings screen in Jetpack Compose).
+       - Verify persistence (e.g., SharedPreferences or DataStore for language settings).
+       - Ensure translations are applied (e.g., string resources in res/values).
+       - Report any missing or incomplete implementation.
+    2. Favorites system:
+       - Check for a UI component to mark/unmark songs as favorites (e.g., button or icon in Jetpack Compose).
+       - Verify storage of favorites (e.g., Room database, SharedPreferences, or file-based).
+       - Ensure a dedicated favorites list is accessible in the UI.
+       - Report any missing or incomplete implementation.
+    3. Always-visible search bar:
+       - Check that the search bar is a persistent UI element in all main screens (Jetpack Compose).
+       - Verify it remains functional and visible during navigation.
+       - Report any issues (e.g., search bar hidden in some screens).
+  - If any feature is missing or incomplete, suggest fixes with code snippets.
+  - Generate a report in Markdown format summarizing the findings (e.g., save to REPORT.md).
+  - Ensure compatibility with Jetpack Compose, MediaSession, and coroutines.
+parameters:
+  temperature: 0.2
+  max_tokens: 512
