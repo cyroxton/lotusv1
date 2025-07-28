@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "request": "launch",
+        "name": "Launch Lotus",
+        "projectPath": "${workspaceFolder}/app",
+        "deviceId": "emulator-5556",
+        "mainClass": "com.dn0ne.player.MainActivity",
+        "preLaunchTask": "build"
+      }
+    ]
+  }

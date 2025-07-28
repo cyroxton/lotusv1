@@ -1,0 +1,5 @@
+"Utiliser Kotlin avec des conventions modernes et coroutines."
+"Respecter les conventions lint du projet Android."
+"Toujours inclure des tests unitaires avec JUnit pour les composants et services."
+"Préférer Jetpack Compose pour l’interface utilisateur."
+"Gérer les permissions Android pour l’accès aux fichiers audio."
