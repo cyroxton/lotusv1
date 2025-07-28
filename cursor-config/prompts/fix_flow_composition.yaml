@@ -1,0 +1,17 @@
+prompt_name: "Fix Flow Operator in Composition and Verify Build"
+description: "Correct the Flow operator invocation within composition in LyricsSheet.kt and ensure the build succeeds."
+context: |
+  Project: Lotus music player for Android
+  - Main file: app/src/main/java/com/dn0ne/player/app/presentation/components/playback/LyricsSheet.kt
+  - UI framework: Jetpack Compose
+  - Gradle version: 8.11.1
+  - Issue to fix:
+    - Lint error at LyricsSheet.kt:254: Flow operator functions should not be invoked within composition [FlowOperatorInvokedInComposition].
+    - Example: positionFlow = playbackStateFlow.map { it.position }
+instructions: |
+  - In app/src/main/java/com/dn0ne/player/app/presentation/components/playback/LyricsSheet.kt:
+    1. Open the file and go to line 254.
+    2. Identify where positionFlow = playbackStateFlow.map { it.position } is defined.
+    3. Move the Flow transformation outside the composable function (e.g., to a ViewModel or use LaunchedEffect).
+    4. Suggested fix: If a ViewModel exists, define positionFlow in the ViewModel with viewModelScope.launch { ... }. Otherwise, use LaunchedEffect in the composable:
+       - Example with LaunchedEffect:
