@@ -37,8 +37,40 @@ instructions: |
     - Build status (success/failure).
   - Ensure compatibility with Jetpack Compose and Gradle 8.11.1.
   - Fix specific compilation errors:
-  1. In app/src/main/java/com/dn0ne/player/app/presentation/components/playback/LyricsSheet.kt:
-     - Define LyricsViewModel if not existing, with playbackStateFlow and positionFlow:
+    1. In app/src/main/java/com/dn0ne/player/app/presentation/components/playback/LyricsSheet.kt:
+       - Define LyricsViewModel if not existing, with playbackStateFlow and positionFlow:
+         ```
+         class LyricsViewModel : ViewModel() {
+             private val _playbackStateFlow = MutableStateFlow(PlaybackState())
+             val playbackStateFlow = _playbackStateFlow.asStateFlow()
+             val positionFlow = playbackStateFlow.map { it.position }
+             fun updatePlaybackState(newState: PlaybackState) {
+                 _playbackStateFlow.value = newState
+             }
+         }
+         ```
+       - Update the composable to use LyricsViewModel with explicit type: 
+         ```
+         @Composable
+         fun LyricsSheet(viewModel: LyricsViewModel = viewModel()) {
+             val position by viewModel.positionFlow.collectAsStateWithLifecycle(initialValue = 0L)
+             // Use 'position' and call viewModel.updatePlaybackState as needed
+         }
+         ```
+       - Ensure proper imports (e.g., androidx.lifecycle.viewmodel.compose.viewModel).
+    2. In app/src/main/java/com/dn0ne/player/app/presentation/components/playback/Queue.kt:
+       - Fix SearchField call at line 202 by ensuring correct parameters (e.g., value and onValueChange):
+         ```
+         var searchQuery by remember { mutableStateOf("") }
+         SearchField(
+             value = searchQuery,
+             onValueChange = { searchQuery = it },
+             icon = Icons.Default.Search,
+             placeholder = stringResource(id = R.string.search_placeholder),
+             modifier = Modifier
+         )
+         ```
+       - Resolve 'it' reference at line 205 by ensuring the lambda context is clear (e.g., use searchQuery directly or define a variable).
 parameters:
   temperature: 0.2
   max_tokens: 1024
