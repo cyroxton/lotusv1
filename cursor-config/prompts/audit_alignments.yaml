@@ -1,0 +1,12 @@
+prompt_name: "Audit Alignment Modifiers"
+description: "Check and optimize alignment modifiers in Jetpack Compose composables."
+context: |
+  Project: Lotus music player
+  - Main files: app/src/main/java/com/dn0ne/player/app/presentation/*.kt
+instructions: |
+  - Analyze all .kt files for misuse of Modifier.align.
+  - Suggest replacing with contentAlignment where appropriate.
+  - Generate a report in ALIGNMENT_AUDIT.md.
+parameters:
+  temperature: 0.2
+  max_tokens: 512

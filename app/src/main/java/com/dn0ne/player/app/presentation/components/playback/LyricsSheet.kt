@@ -250,8 +250,11 @@ fun LyricsSheet(
                                 }
 
                                 if (line.isNotBlank()) {
+                                    val positionFlow = remember(playbackStateFlow) {
+                                        playbackStateFlow.map { it.position }
+                                    }
                                     SyncedLyricsLine(
-                                        positionFlow = playbackStateFlow.map { it.position },
+                                        positionFlow = positionFlow,
                                         time = time,
                                         nextTime = nextTime,
                                         line = line,
@@ -280,8 +283,11 @@ fun LyricsSheet(
                                         modifier = Modifier.fillMaxWidth()
                                     )
                                 } else {
+                                    val positionFlow = remember(playbackStateFlow) {
+                                        playbackStateFlow.map { it.position }
+                                    }
                                     BubblesLine(
-                                        positionFlow = playbackStateFlow.map { it.position },
+                                        positionFlow = positionFlow,
                                         time = time,
                                         nextTime = nextTime,
                                         modifier = Modifier.align(
