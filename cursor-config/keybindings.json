@@ -1,0 +1,37 @@
+[
+  {
+    "key": "ctrl+shift+i",
+    "command": "cursor.agentMode",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "cursor.inlineChat",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "cursor.quickQuestion",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "workbench.action.tasks.runTask",
+    "args": "build"
+  },
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.tasks.runTask",
+    "args": "test"
+  },
+  {
+    "key": "ctrl+shift+r",
+    "command": "workbench.action.tasks.runTask",
+    "args": "run"
+  },
+  {
+    "key": "ctrl+shift+p",
+    "command": "workbench.action.quickOpen",
+    "when": "editorTextFocus"
+  }
+] 

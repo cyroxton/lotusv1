@@ -1,0 +1,21 @@
+prompt_name: "Add Error Handling to PlaybackService"
+description: "Implement comprehensive error handling in PlaybackService.kt for missing or corrupt audio files with user-friendly notifications."
+context: |
+  File: app/src/main/java/com/dn0ne/player/PlaybackService.kt
+  - Current implementation may crash on invalid media files
+  - Need to handle IOException, SecurityException, and other media-related errors
+  - Should provide user feedback through notifications
+instructions: |
+  - Add try-catch blocks around media operations in PlaybackService.kt
+  - Create a NotificationHelper class for user-friendly error messages
+  - Handle specific exceptions: IOException, SecurityException, IllegalArgumentException
+  - Implement retry mechanism for temporary failures
+  - Add logging for debugging purposes
+  - Create unit tests for error scenarios in `app/src/test/java/com/dn0ne/player/PlaybackServiceTest.kt`
+  - Ensure error handling doesn't break the MediaSession lifecycle
+parameters:
+  temperature: 0.1
+  max_tokens: 400
+  language: kotlin
+  framework: android
+  focus: error_handling 

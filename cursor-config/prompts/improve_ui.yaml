@@ -1,0 +1,24 @@
+prompt_name: "Improve UI with Jetpack Compose"
+description: "Enhance the user interface using modern Jetpack Compose components and Material Design 3 principles."
+context: |
+  Files: 
+  - app/src/main/java/com/dn0ne/player/presentation/PlayerScreen.kt
+  - app/src/main/java/com/dn0ne/player/presentation/components/playback/PlayerSheet.kt
+  - Current UI uses basic Compose components
+  - Need to implement Material Design 3 theming
+instructions: |
+  - Update PlayerScreen.kt to use Material Design 3 components
+  - Implement dark/light theme support
+  - Add smooth animations for state transitions
+  - Improve accessibility with proper content descriptions
+  - Add haptic feedback for user interactions
+  - Implement proper loading states and error states
+  - Use modern Compose patterns like remember and derivedStateOf
+  - Ensure responsive design for different screen sizes
+  - Add proper keyboard navigation support
+parameters:
+  temperature: 0.3
+  max_tokens: 600
+  language: kotlin
+  framework: jetpack_compose
+  design_system: material_design_3 

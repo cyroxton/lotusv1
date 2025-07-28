@@ -1,0 +1,27 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "kotlin.languageServer.enabled": true,
+  "android.studio.executable": "C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe",
+  "cursor.rules": [
+    "Use Kotlin coroutines for async operations",
+    "Follow Jetpack Compose best practices",
+    "Respect Android lifecycle management",
+    "Provide complete code without placeholders",
+    "Explain changes briefly before applying",
+    "Always use functional programming approach",
+    "Prefer Tailwind CSS for styling when applicable"
+  ],
+  "cursor.completion.temperature": 0.2,
+  "cursor.completion.maxTokens": 512,
+  "files.associations": {
+    "*.kt": "kotlin",
+    "*.kts": "kotlin"
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "kotlin.debugAdapter.enabled": true,
+  "kotlin.trace.server": "messages"
+} 

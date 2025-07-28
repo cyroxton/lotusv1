@@ -1,0 +1,20 @@
+prompt_name: "Add Repository Pattern to PlaybackService"
+description: "Refactor PlaybackService.kt to use a Repository pattern for media access, improving testability and modularity."
+context: |
+  File: app/src/main/java/com/dn0ne/player/PlaybackService.kt
+  - Current implementation directly accesses media files
+  - Dependencies: MediaSession, Kotlin coroutines, Android Storage API
+  - Project structure follows MVVM architecture
+instructions: |
+  - Create a MediaRepository interface in a new file `app/src/main/java/com/dn0ne/player/data/repository/MediaRepository.kt`
+  - Implement MediaRepositoryImpl with methods to fetch and manage local audio files
+  - Refactor PlaybackService.kt to inject MediaRepository
+  - Add unit tests for MediaRepositoryImpl in `app/src/test/java/com/dn0ne/player/data/repository/MediaRepositoryTest.kt`
+  - Ensure compatibility with existing MediaSession and coroutine-based playback
+  - Use dependency injection pattern consistent with the project
+parameters:
+  temperature: 0.2
+  max_tokens: 512
+  language: kotlin
+  framework: android
+  architecture: mvvm 
