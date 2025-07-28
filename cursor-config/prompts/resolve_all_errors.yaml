@@ -1,0 +1,40 @@
+prompt_name: "Resolve All Errors and Optimize Lotus Project"
+description: "Analyze and fix all lint errors, optimize Flow and alignment usage, and apply best practices to the Lotus music player project."
+context: |
+  Project: Lotus music player for Android
+  - Main directory: C:\Users\emsjo\Documents\VETERENT\DEV\APK\lotus-masterv1
+  - UI framework: Jetpack Compose
+  - Gradle version: 8.11.1
+  - Existing reports:
+    - REPORT_FLOW_FIXES.md: Corrected FlowOperatorInvokedInComposition at LyricsSheet.kt:254 and 287 with remember.
+    - ALIGNMENT_AUDIT.md: Identified redundant Modifier.align usages (e.g., Queue.kt:222, PlayerScreen.kt:736).
+    - RECOMMENDATIONS.md: Suggests moving Flow logic to ViewModels, optimizing alignments, and adding tests.
+  - Current issues:
+    - Lint found 240 errors and 97 warnings (first failure at LyricsSheet.kt:254, already fixed).
+    - Build fails with ./gradlew.bat build due to strict lint rules.
+    - Lint report: C:\Users\emsjo\Documents\VETERENT\DEV\APK\lotus-masterv1\app\build\intermediates\lint_intermediate_text_report\debug\lintReportDebug\lint-results-debug.txt
+instructions: |
+  - Analyze the lint report (lint-results-debug.txt) to identify all errors (excluding FlowOperatorInvokedInComposition already fixed).
+  - Fix the top 10 lint errors with priority on:
+    1. Correcting syntax or usage issues in Jetpack Compose.
+    2. Removing redundant Modifier.align based on ALIGNMENT_AUDIT.md (e.g., Queue.kt:222, PlayerScreen.kt:736).
+    3. Ensuring compatibility with Gradle 8.11.1.
+  - Implement Flow optimizations:
+    1. Move existing Flow transformations (e.g., positionFlow) to a ViewModel (e.g., LyricsViewModel) where applicable.
+    2. Use collectAsStateWithLifecycle instead of collectAsState where possible.
+  - Apply structural improvements:
+    1. Break down large composables (e.g., PlayerScreen.kt, LyricsSheet.kt) into smaller, reusable components.
+    2. Add KDoc to key composables as per RECOMMENDATIONS.md.
+  - Configure lint baseline if fixes are incomplete:
+    1. Add to app/build.gradle: android { lint { baseline = file("lint-baseline.xml") } }
+    2. Run ./gradlew updateLintBaseline to generate the baseline.
+  - Run ./gradlew.bat build to verify all fixes.
+  - Generate a comprehensive report in ALL_ERRORS_FIXES.md summarizing:
+    - List of fixed errors with file/line details.
+    - Changes to Flow usage and alignments.
+    - Structural improvements applied.
+    - Build status (success/failure).
+  - Ensure compatibility with Jetpack Compose and Gradle 8.11.1.
+parameters:
+  temperature: 0.2
+  max_tokens: 1024
