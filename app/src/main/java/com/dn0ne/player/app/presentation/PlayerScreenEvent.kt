@@ -10,6 +10,7 @@ import com.dn0ne.player.app.domain.track.Track
 
 sealed interface PlayerScreenEvent {
     data class OnTrackClick(val track: Track, val playlist: Playlist): PlayerScreenEvent
+    data class OnToggleFavorite(val track: Track): PlayerScreenEvent
 
     data class OnPlayerExpandedChange(val isExpanded: Boolean): PlayerScreenEvent
     data class OnLyricsSheetExpandedChange(val isExpanded: Boolean): PlayerScreenEvent

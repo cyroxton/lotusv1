@@ -12,6 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
@@ -32,6 +37,7 @@ fun TrackListItem(
     isCurrent: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    onToggleFavorite: () -> Unit,
     onPlayNextClick: () -> Unit,
     onAddToQueueClick: () -> Unit,
     onAddToPlaylistClick: () -> Unit,
@@ -92,6 +98,12 @@ fun TrackListItem(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
+            IconButton(onClick = onToggleFavorite) {
+                Icon(
+                    imageVector = if (track.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = if (track.isFavorite) "Remove from favorites" else "Add to favorites"
+                )
+            }
             TrackMenuButton(
                 onPlayNextClick = onPlayNextClick,
                 onAddToQueueClick = onAddToQueueClick,

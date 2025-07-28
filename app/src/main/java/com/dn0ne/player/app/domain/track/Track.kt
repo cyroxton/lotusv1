@@ -22,5 +22,6 @@ data class Track(
     val genre: String? = null,
     val year: String? = null,
     val trackNumber: String? = null,
-    val bitrate: String? = null
+    val bitrate: String? = null,
+    val isFavorite: Boolean = false
 )

@@ -10,10 +10,13 @@ import com.dn0ne.player.app.data.remote.lyrics.LrclibLyricsProvider
 import com.dn0ne.player.app.data.remote.lyrics.LyricsProvider
 import com.dn0ne.player.app.data.remote.metadata.MetadataProvider
 import com.dn0ne.player.app.data.remote.metadata.MusicBrainzMetadataProvider
+import com.dn0ne.player.app.data.repository.FavoriteRepository
+import com.dn0ne.player.app.data.repository.FavoriteTrack
 import com.dn0ne.player.app.data.repository.LyricsJson
 import com.dn0ne.player.app.data.repository.LyricsRepository
 import com.dn0ne.player.app.data.repository.PlaylistJson
 import com.dn0ne.player.app.data.repository.PlaylistRepository
+import com.dn0ne.player.app.data.repository.RealmFavoriteRepository
 import com.dn0ne.player.app.data.repository.RealmLyricsRepository
 import com.dn0ne.player.app.data.repository.RealmPlaylistRepository
 import com.dn0ne.player.app.data.repository.TrackRepository
@@ -81,7 +84,7 @@ val playerModule = module {
 
     single<Realm> {
         val configuration = RealmConfiguration.create(
-            schema = setOf(LyricsJson::class, PlaylistJson::class)
+            schema = setOf(LyricsJson::class, PlaylistJson::class, FavoriteTrack::class)
         )
 
         Realm.open(configuration)
@@ -95,6 +98,12 @@ val playerModule = module {
 
     single<PlaylistRepository> {
         RealmPlaylistRepository(
+            realm = get()
+        )
+    }
+
+    single<FavoriteRepository> {
+        RealmFavoriteRepository(
             realm = get()
         )
     }
@@ -120,10 +129,12 @@ val playerModule = module {
             lyricsRepository = get(),
             lyricsReader = get(),
             playlistRepository = get(),
+            favoriteRepository = get(),
             unsupportedArtworkEditFormats = get<MetadataWriter>().unsupportedArtworkEditFormats,
             settings = get(),
             musicScanner = get(),
-            equalizerController = get()
+            equalizerController = get(),
+            languageManager = get()
         )
     }
 }

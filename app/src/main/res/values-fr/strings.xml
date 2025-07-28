@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="grant_permission_in_settings">Veuillez accorder la permission dans les paramètres</string>
+    <string name="write_permission_denied">Permission d'écriture refusée</string>
+    <string name="no_read_permission">Aucune permission de lecture</string>
+    <string name="no_write_permission">Aucune permission d'écriture</string>
+    <string name="failed_to_read">Échec de la lecture</string>
+    <string name="failed_to_write">Échec de l'écriture</string>
+    <string name="unknown_error_occurred">Une erreur inconnue est survenue</string>
+    <string name="metadata_change_succeed">Le changement des métadonnées a réussi</string>
+    <string name="unknown">Inconnu</string>
+    <string name="unknown_album">Album inconnu</string>
+    <string name="unknown_artist">Artiste inconnu</string>
+    <string name="unknown_genre">Genre inconnu</string>
+    <string name="settings">Paramètres</string>
+    <string name="track_search">Recherche de piste</string>
+    <string name="enable_list_view">Activer la vue en liste</string>
+    <string name="enable_grid_view">Activer la vue en grille</string>
+    <string "name="close_track_search">Fermer la recherche de piste</string>
+    <string name="filter">Filtre</string>
+    <string name="search">Rechercher</string>
+    <string name="back">Retour</string>
+    <string name="select_all">Tout sélectionner</string>
+    <string name="add_to_queue">Ajouter à la file d'attente</string>
+    <string name="add_to_playlist">Ajouter à la playlist</string>
+    <string name="unknown_folder">Dossier inconnu</string>
+    <string name="scroll_to_current_track">Faire défiler jusqu'à la piste actuelle</string>
+    <string name="scroll_to_top">Faire défiler vers le haut</string>
+    <string name="language">Langue</string>
+    <string name="language_changed">La langue a été changée. Le changement prendra effet après le redémarrage de l'application.</string>
+</resources>

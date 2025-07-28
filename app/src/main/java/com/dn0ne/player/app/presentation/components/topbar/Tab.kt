@@ -9,5 +9,6 @@ enum class Tab(@StringRes val titleResId: Int) {
     Albums(R.string.albums),
     Artists(R.string.artists),
     Genres(R.string.genres),
-    Folders(R.string.folders)
+    Folders(R.string.folders),
+    Favorites(R.string.favorites)
 }

@@ -1,5 +1,6 @@
 package com.dn0ne.player.core.di
 
+import com.dn0ne.player.core.data.LanguageManager
 import com.dn0ne.player.core.data.MusicScanner
 import com.dn0ne.player.core.data.Settings
 import org.koin.android.ext.koin.androidContext
@@ -15,5 +16,9 @@ val appModule = module {
             context = androidContext(),
             settings = get()
         )
+    }
+
+    single<LanguageManager> {
+        LanguageManager(context = androidContext())
     }
 }

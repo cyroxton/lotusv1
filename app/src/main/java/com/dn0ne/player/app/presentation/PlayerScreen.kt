@@ -274,6 +274,7 @@ fun PlayerScreen(
                 ) {
                     composable<PlayerRoutes.Main> {
                         val trackList by viewModel.trackList.collectAsState()
+                        val favoriteTracks by viewModel.favoriteTracks.collectAsState()
                         val playlists by viewModel.playlists.collectAsState()
                         val albumPlaylists by viewModel.albumPlaylists.collectAsState()
                         val artistPlaylists by viewModel.artistPlaylists.collectAsState()
@@ -334,7 +335,7 @@ fun PlayerScreen(
                             onTabChange = {
                                 selectedTab = it
                             },
-                            trackList = trackList,
+                            trackList = if (selectedTab == Tab.Favorites) favoriteTracks else trackList,
                             currentTrack = currentTrack,
                             onTrackClick = { track, playlist ->
                                 viewModel.onEvent(
@@ -343,6 +344,9 @@ fun PlayerScreen(
                                         playlist = playlist
                                     )
                                 )
+                            },
+                            onToggleFavorite = { track ->
+                                viewModel.onEvent(PlayerScreenEvent.OnToggleFavorite(track))
                             },
                             onPlayNextClick = {
                                 viewModel.onEvent(PlayerScreenEvent.OnPlayNextClick(it))
@@ -936,6 +940,7 @@ fun MainPlayerScreen(
     trackList: List<Track>,
     currentTrack: Track?,
     onTrackClick: (Track, Playlist) -> Unit,
+    onToggleFavorite: (Track) -> Unit,
     onPlayNextClick: (Track) -> Unit,
     onAddToQueueClick: (List<Track>) -> Unit,
     onAddToPlaylistClick: (List<Track>) -> Unit,
@@ -999,10 +1004,10 @@ fun MainPlayerScreen(
 
     LazyGridWithCollapsibleTabsTopBar(
         gridState = gridState,
-        topBarTabs = topBarTabs,
+        topBarTabs = topBarTabs + Tab.Favorites,
         defaultSelectedTab = defaultTab,
         onTabChange = {
-            showSearchField = false
+            // showSearchField = false  // Supprimé pour garder la barre de recherche toujours visible
             searchFieldValue = ""
 
             isInSelectionMode = false
@@ -1088,20 +1093,22 @@ fun MainPlayerScreen(
                                     }
                                 }
 
-                                IconButton(
-                                    onClick = {
-                                        showSearchField = true
-                                    }
-                                ) {
-                                    Icon(
-                                        imageVector = if (replaceSearchWithFilter && tab == Tab.Tracks) {
-                                            Icons.Rounded.FilterList
-                                        } else Icons.Rounded.Search,
-                                        contentDescription = context.resources.getString(
-                                            R.string.track_search
-                                        )
-                                    )
-                                }
+                                SearchField(
+                                    value = searchFieldValue,
+                                    onValueChange = {
+                                        searchFieldValue = it.trimStart()
+                                    },
+                                    icon = if (replaceSearchWithFilter && tab == Tab.Tracks) {
+                                        Icons.Rounded.FilterList
+                                    } else Icons.Rounded.Search,
+                                    placeholder = if (replaceSearchWithFilter && tab == Tab.Tracks) {
+                                        context.resources.getString(R.string.filter)
+                                    } else context.resources.getString(R.string.search),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 48.dp)
+                                        .align(Alignment.Center)
+                                )
                             }
                         }
                     }
@@ -1269,7 +1276,7 @@ fun MainPlayerScreen(
         contentVerticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
         gridCells = {
-            if (it == Tab.Tracks || !gridPlaylists) GridCells.Fixed(1) else {
+            if (it == Tab.Tracks || it == Tab.Favorites || !gridPlaylists) GridCells.Fixed(1) else {
                 GridCells.Adaptive(150.dp)
             }
         },
@@ -1278,6 +1285,34 @@ fun MainPlayerScreen(
             .safeDrawingPadding()
     ) { tab ->
         when (tab) {
+            Tab.Favorites -> {
+                trackList(
+                    trackList = trackList,
+                    currentTrack = currentTrack,
+                    onTrackClick = {
+                        onTrackClick(
+                            it,
+                            Playlist(
+                                name = null,
+                                trackList = trackList
+                            )
+                        )
+                    },
+                    onToggleFavorite = onToggleFavorite,
+                    onPlayNextClick = onPlayNextClick,
+                    onAddToQueueClick = {
+                        onAddToQueueClick(listOf(it))
+                    },
+                    onAddToPlaylistClick = {
+                        onAddToPlaylistClick(listOf(it))
+                    },
+                    onViewTrackInfoClick = onViewTrackInfoClick,
+                    onGoToAlbumClick = onGoToAlbumClick,
+                    onGoToArtistClick = onGoToArtistClick,
+                    onLongClick = {}
+                )
+            }
+
             Tab.Tracks -> {
                 if (!isInSelectionMode) {
                     trackList(
@@ -1294,6 +1329,7 @@ fun MainPlayerScreen(
                                 )
                             )
                         },
+                        onToggleFavorite = onToggleFavorite,
                         onPlayNextClick = onPlayNextClick,
                         onAddToQueueClick = {
                             onAddToQueueClick(listOf(it))
@@ -1744,3 +1780,4 @@ private sealed interface PlayerRoutes {
     @Serializable
     data object MutablePlaylist : PlayerRoutes
 }
+

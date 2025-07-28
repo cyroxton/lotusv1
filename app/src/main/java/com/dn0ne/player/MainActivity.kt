@@ -47,6 +47,7 @@ import com.dn0ne.player.app.presentation.components.snackbar.ObserveAsEvents
 import com.dn0ne.player.app.presentation.components.snackbar.ScaffoldWithSnackbarEvents
 import com.dn0ne.player.app.presentation.components.snackbar.SnackbarController
 import com.dn0ne.player.app.presentation.components.snackbar.SnackbarEvent
+import com.dn0ne.player.core.data.LanguageManager
 import com.dn0ne.player.core.data.MusicScanner
 import com.dn0ne.player.core.presentation.Routes
 import com.dn0ne.player.setup.data.SetupState
@@ -66,6 +67,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
+
+        val languageManager: LanguageManager = get()
+        languageManager.language = languageManager.language
 
         SingletonImageLoader.setSafe {
             ImageLoader.Builder(applicationContext)

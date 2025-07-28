@@ -1,0 +1,23 @@
+prompt_name: "Fix Language Selection, Favorites, and Search Bar Issues"
+description: "Apply fixes for issues identified in the Lotus features verification report."
+context: |
+  Project: Lotus music player for Android
+  - Main files: app/src/main/java/com/dn0ne/player/app/presentation/components/topbar/Tab.kt, app/src/main/res/values/strings.xml, app/src/main/java/com/dn0ne/player/app/presentation/PlayerScreen.kt
+  - UI framework: Jetpack Compose
+  - Issues to fix:
+    - Missing Favorites in Tab enum.
+    - Missing "favorites" translation.
+    - Search bar not persistent across tab changes.
+instructions: |
+  - In Tab.kt:
+    - Add Favorites to the Tab enum with R.string.favorites.
+  - In strings.xml:
+    - Add a string resource for "favorites" with value "Favorites".
+  - In PlayerScreen.kt:
+    - Remove the line that sets showSearchField to false in onTabChange.
+    - Ensure SearchBar is in a persistent TopAppBar.
+  - Generate a report confirming the fixes in REPORT_FIXES.md.
+  - Add unit tests for the Favorites system in FavoriteRepositoryTest.kt.
+parameters:
+  temperature: 0.2
+  max_tokens: 512 

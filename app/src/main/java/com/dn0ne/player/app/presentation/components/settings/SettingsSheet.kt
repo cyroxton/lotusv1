@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.rounded.PlaylistPlay
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.ColorLens
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Lyrics
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Radar
@@ -189,6 +190,14 @@ fun SettingsSheet(
                                     }
                                 ),
                                 SettingsItem(
+                                    title = context.resources.getString(R.string.language),
+                                    supportingText = context.resources.getString(R.string.language_supporting_text),
+                                    icon = Icons.Rounded.Language,
+                                    onClick = {
+                                        navController.navigate(SettingsRoutes.Language)
+                                    }
+                                ),
+                                SettingsItem(
                                     title = context.resources.getString(R.string.lyrics),
                                     supportingText = context.resources.getString(R.string.lyrics_supporting_text),
                                     icon = Icons.Rounded.Lyrics,
@@ -275,6 +284,16 @@ fun SettingsSheet(
                     )
                 }
 
+                composable<SettingsRoutes.Language> {
+                    LanguageSettings(
+                        languageManager = state.languageManager,
+                        onBackClick = {
+                            navController.navigateUp()
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
                 composable<SettingsRoutes.Lyrics> {
                     LyricsSettings(
                         settings = state.settings,
@@ -317,6 +336,9 @@ sealed interface SettingsRoutes {
 
     @Serializable
     data object Theme : SettingsRoutes
+
+    @Serializable
+    data object Language : SettingsRoutes
 
     @Serializable
     data object Lyrics : SettingsRoutes

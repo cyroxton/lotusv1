@@ -16,6 +16,7 @@ import com.dn0ne.player.app.data.LyricsReader
 import com.dn0ne.player.app.data.SavedPlayerState
 import com.dn0ne.player.app.data.remote.lyrics.LyricsProvider
 import com.dn0ne.player.app.data.remote.metadata.MetadataProvider
+import com.dn0ne.player.app.data.repository.FavoriteRepository
 import com.dn0ne.player.app.data.repository.LyricsRepository
 import com.dn0ne.player.app.data.repository.PlaylistRepository
 import com.dn0ne.player.app.data.repository.TrackRepository
@@ -39,6 +40,7 @@ import com.dn0ne.player.app.presentation.components.trackinfo.InfoSearchSheetSta
 import com.dn0ne.player.app.presentation.components.trackinfo.LyricsControlSheetState
 import com.dn0ne.player.app.presentation.components.trackinfo.ManualInfoEditSheetState
 import com.dn0ne.player.app.presentation.components.trackinfo.TrackInfoSheetState
+import com.dn0ne.player.core.data.LanguageManager
 import com.dn0ne.player.core.data.MusicScanner
 import com.dn0ne.player.core.data.Settings
 import kotlinx.coroutines.Dispatchers
@@ -64,10 +66,12 @@ class PlayerViewModel(
     private val lyricsRepository: LyricsRepository,
     private val lyricsReader: LyricsReader,
     private val playlistRepository: PlaylistRepository,
+    private val favoriteRepository: FavoriteRepository,
     private val unsupportedArtworkEditFormats: List<String>,
     val settings: Settings,
     private val musicScanner: MusicScanner,
-    private val equalizerController: EqualizerController
+    private val equalizerController: EqualizerController,
+    private val languageManager: LanguageManager
 ) : ViewModel() {
     var player: Player? = null
 
@@ -75,7 +79,8 @@ class PlayerViewModel(
         SettingsSheetState(
             settings = settings,
             musicScanner = musicScanner,
-            equalizerController = equalizerController
+            equalizerController = equalizerController,
+            languageManager = languageManager
         )
     )
     val settingsSheetState = _settingsSheetState.stateIn(
@@ -113,11 +118,27 @@ class PlayerViewModel(
     )
 
     private val _trackList = MutableStateFlow(emptyList<Track>())
-    val trackList = _trackList.stateIn(
+    val trackList = combine(
+        _trackList,
+        favoriteRepository.getFavoriteTracksUris()
+    ) { tracks, favoriteUris ->
+        tracks.map { track ->
+            track.copy(isFavorite = track.uri.toString() in favoriteUris)
+        }
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000L),
         initialValue = emptyList()
     )
+
+    val favoriteTracks = trackList.map { list ->
+        list.filter { it.isFavorite }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000L),
+        initialValue = emptyList()
+    )
+
 
     val albumPlaylists = _trackList.map {
         it.groupBy { it.album }.entries.map {
@@ -396,6 +417,16 @@ class PlayerViewModel(
                     viewModelScope.launch(Dispatchers.IO) {
                         savedPlayerState.playlist = event.playlist
                         savedPlayerState.track = event.track
+                    }
+                }
+            }
+
+            is OnToggleFavorite -> {
+                viewModelScope.launch {
+                    if (event.track.isFavorite) {
+                        favoriteRepository.removeFavorite(event.track.uri.toString())
+                    } else {
+                        favoriteRepository.addFavorite(event.track.uri.toString())
                     }
                 }
             }
