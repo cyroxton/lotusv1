@@ -1,0 +1,56 @@
+prompt_name: "Diagnose Lotus Bugs : Crash Langue & Refresh Musique"
+description: "Analyser et diagnostiquer deux bugs critiques dans l'application Lotus avant toute correction."
+context: |
+  Application : Lotus — lecteur musical Android codé en Kotlin avec Jetpack Compose, MVVM, Koin, Realm, et SharedPreferences.
+  Fonctionnalités clés : paramétrage des langues, affichage de la bibliothèque musicale, backend service audio.
+
+  🔧 Bug 1 : Crash au changement de langue
+  - Comportement : L’application se ferme brutalement après avoir cliqué sur l’option de sélection de langue dans les paramètres.
+  - Hypothèses : 
+    - Contexte Android (`Context`) mal passé ou non mis à jour après changement de `Locale`.
+    - Fichier de traduction (`strings.xml`) manquant ou mal formé (balises XML invalides, caractères spéciaux non échappés).
+    - Exception non gérée dans un `Service` audio lors de la recréation de l’`Activity`.
+
+  🔁 Bug 2 : Affichage des musiques ne se recharge pas
+  - Comportement : Les musiques n’apparaissent pas sans actualisation manuelle après lancement ou navigation.
+  - Hypothèses : 
+    - `Flow` ou `StateFlow` dans le ViewModel ne s’active pas au premier chargement.
+    - `LazyColumn` ou `collectAsStateWithLifecycle` ne détecte pas les changements (observer détaché ou cycle de vie mal géré).
+    - Cache Realm ou MediaStore bloque les nouvelles données jusqu’à un refresh manuel.
+
+instructions: |
+  - Étape 1 : Diagnostiquer le bug du crash langue  
+    - Localiser le code gérant le `LocalePicker` (ex. : `SettingsScreen.kt`, `MainActivity.kt`).  
+    - Ajouter des logs pour tracer le `Context` avant et après le changement de langue :  
+      ```kotlin
+      Log.d("LocaleDebug", "Contexte avant : ${context.javaClass.simpleName}")
+      updateLocale(context, languageCode)
+      Log.d("LocaleDebug", "Contexte après : ${context.javaClass.simpleName}")
+      ```  
+    - Vérifier l’intégrité des fichiers de traduction (`values-fr/strings.xml`, `values-ru/strings.xml`, `values-uk/strings.xml`) :  
+      - Parser chaque fichier pour détecter les erreurs XML (balises non fermées, caractères spéciaux non échappés).  
+    - Capturer les logs d’erreur via Logcat lors du crash et identifier l’exception.  
+
+  - Étape 2 : Diagnostiquer le bug du refresh musique  
+    - Inspecter le ViewModel alimentant le screen principal (ex. : `MusicViewModel.kt`).  
+    - Ajouter des logs pour suivre l’émission des données :  
+      ```kotlin
+      Log.d("MusicViewModel", "Émission de musicList : ${musicList.size}")
+      ```  
+    - Vérifier le comportement de `collectAsStateWithLifecycle` dans le Composable principal (ex. : `MainScreen.kt`) :  
+      - Ajouter un log dans le `LaunchedEffect` ou à chaque rendu :  
+        ```kotlin
+        Log.d("MainScreen", "Rendu avec ${musicList.size} musiques")
+        ```  
+    - Tester si un re-scan manuel (via une action UI) déclenche une mise à jour, et logger le résultat.  
+
+  - Étape 3 : Générer un rapport  
+    - Créer un fichier `BUG_DIAGNOSIS.md` avec :  
+      - Détails des logs pour le crash langue (contexte, exception).  
+      - Détails des logs pour le refresh musique (émissions, rendus).  
+      - Confirmation ou invalidation des hypothèses initiales.  
+      - Proposer une liste de causes probables basées sur les logs.  
+
+parameters:
+  temperature: 0.3
+  max_tokens: 1024
