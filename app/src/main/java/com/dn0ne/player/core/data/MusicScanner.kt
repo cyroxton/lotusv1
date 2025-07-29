@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.media.MediaScannerConnection
 import android.os.Environment
+import android.util.Log
 import com.dn0ne.player.R
 import com.dn0ne.player.app.presentation.components.snackbar.SnackbarAction
 import com.dn0ne.player.app.presentation.components.snackbar.SnackbarController
@@ -22,6 +23,7 @@ class MusicScanner(
     private val allowedExtensions = setOf("mp3", "wav", "aac", "flac", "ogg", "m4a")
 
     suspend fun refreshMedia(showMessages: Boolean = true, onComplete: () -> Unit = {}) {
+        Log.d("MusicScanner", "refreshMedia() démarré")
         withContext(Dispatchers.IO) {
             try {
                 val isScanModeInclusive = settings.isScanModeInclusive.value
@@ -53,6 +55,7 @@ class MusicScanner(
 
                 if (paths.isEmpty()) {
                     if (showMessages) {
+                        Log.d("MusicScanner", "Aucun fichier à actualiser")
                         SnackbarController.sendEvent(
                             event = SnackbarEvent(
                                 message = R.string.nothing_to_refresh
@@ -66,6 +69,7 @@ class MusicScanner(
                         arrayOf("audio/*"),
                         null
                     )
+                    Log.d("MusicScanner", "Scan terminé pour ${paths.size} fichiers")
 
                     if (showMessages) {
                         SnackbarController.sendEvent(
@@ -76,6 +80,7 @@ class MusicScanner(
                     }
                 }
             } catch (e: Exception) {
+                Log.e("MusicScanner", "Erreur lors du refresh", e)
                 if (!showMessages) return@withContext
                 SnackbarController.sendEvent(
                     SnackbarEvent(
@@ -96,6 +101,7 @@ class MusicScanner(
                     )
                 )
             } catch (e: java.lang.Exception) {
+                Log.e("MusicScanner", "Erreur Java lors du refresh", e)
                 if (!showMessages) return@withContext
                 SnackbarController.sendEvent(
                     SnackbarEvent(
@@ -119,6 +125,7 @@ class MusicScanner(
             // Notifier le TrackRepository que le cache doit être invalidé
             trackRepository?.invalidateCache()
             onComplete()
+            Log.d("MusicScanner", "refreshMedia() terminé")
         }
     }
 

@@ -2,6 +2,7 @@ package com.dn0ne.player.core.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 
@@ -12,11 +13,20 @@ class LanguageManager(private val context: Context) {
     var language: String
         get() = prefs.getString("language", "en") ?: "en"
         set(value) {
+            Log.d("LocaleDebug", "Changement de langue demandé: $value")
+            Log.d("LocaleDebug", "Contexte actuel: ${prefs.javaClass.simpleName}")
             prefs.edit().putString("language", value).apply()
             val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(value)
+            Log.d("LocaleDebug", "AppLocale créé: $appLocale")
+            try {
             AppCompatDelegate.setApplicationLocales(appLocale)
-            // Recréer l'activité pour appliquer correctement le changement de langue
-            (context as? android.app.Activity)?.recreate()
+                Log.d("LocaleDebug", "setApplicationLocales appelé avec succès")
+                // Recréer l'activité pour appliquer correctement le changement de langue
+                (context as? android.app.Activity)?.recreate()
+            } catch (e: Exception) {
+                Log.e("LocaleDebug", "Erreur lors du changement de langue", e)
+                throw e
+            }
         }
 
     val availableLanguages = mapOf(

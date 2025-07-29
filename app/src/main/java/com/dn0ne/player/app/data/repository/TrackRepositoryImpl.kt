@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.compose.ui.util.fastForEach
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
@@ -21,7 +22,6 @@ class TrackRepositoryImpl(
     private val context: Context,
     private val settings: Settings,
 ) : TrackRepository {
-    
     private val _tracksFlow = MutableStateFlow<List<Track>>(emptyList())
     private var cachedTracks: List<Track>? = null
     private var isCacheValid = false
@@ -30,8 +30,10 @@ class TrackRepositoryImpl(
         // Initialiser le cache au démarrage
         refreshTracks()
     }
+    
     override fun getTracks(): Flow<List<Track>> {
         // Retourner le flow directement
+        Log.d("TrackRepository", "getTracks() appelé")
         return _tracksFlow
     }
     
@@ -46,7 +48,6 @@ class TrackRepositoryImpl(
             _tracksFlow.value = cachedTracks!!
             return
         }
-        
         val trackIdToGenre = getTrackIdToGenreMap()
 
         val collection =
@@ -128,6 +129,7 @@ class TrackRepositoryImpl(
 
         val tracks = mutableListOf<Track>()
         query?.use { cursor ->
+            Log.d("TrackRepository", "Cursor obtenu avec ${cursor.count} entrées")
             val idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
             val dataColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
             val durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
@@ -197,10 +199,10 @@ class TrackRepositoryImpl(
                 )
             }
         }
-        
         // Mettre à jour le cache et le flow
         cachedTracks = tracks
         isCacheValid = true
+        Log.d("TrackRepository", "Retour de ${tracks.size} pistes")
         _tracksFlow.value = tracks
     }
 
