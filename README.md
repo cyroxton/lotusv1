@@ -30,7 +30,7 @@
 - Designed with [Material You](https://m3.material.io/) and supports dynamic color palettes
 
 ## Support
-If you enjoy using Lotus, consider [buying me a coffee]((https://coff.ee/cyroxton))!
+If you enjoy using Lotus, consider [buying me a coffee](https://coff.ee/cyroxton)!
 
 ## Build
 1. **Get the Source Code**  
