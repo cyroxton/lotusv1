@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.compose.ui.util.fastForEach
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
@@ -20,6 +21,7 @@ class TrackRepositoryImpl(
     private val settings: Settings,
 ) : TrackRepository {
     override fun getTracks(): List<Track> {
+        Log.d("TrackRepository", "getTracks() appelé")
         val trackIdToGenre = getTrackIdToGenreMap()
 
         val collection =
@@ -101,6 +103,7 @@ class TrackRepositoryImpl(
 
         val tracks = mutableListOf<Track>()
         query?.use { cursor ->
+            Log.d("TrackRepository", "Cursor obtenu avec ${cursor.count} entrées")
             val idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
             val dataColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
             val durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
@@ -171,6 +174,7 @@ class TrackRepositoryImpl(
             }
         }
 
+        Log.d("TrackRepository", "Retour de ${tracks.size} pistes")
         return tracks
     }
 
