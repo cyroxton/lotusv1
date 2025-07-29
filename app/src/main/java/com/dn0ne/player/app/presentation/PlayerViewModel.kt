@@ -252,34 +252,29 @@ class PlayerViewModel(
     private val _pendingTrackUris = Channel<Uri>()
 
     init {
+        // Collecter le flux de pistes de manière réactive
         viewModelScope.launch(Dispatchers.IO) {
-            while (true) {
-                val tracks = trackRepository.getTracks()
-
-                if (_trackList.value.size != tracks.size || !_trackList.value.containsAll(tracks)) {
-                    _trackList.update {
-                        tracks.sortedBy(_trackSort.value, _trackSortOrder.value)
-                    }
-
-                    if (_trackInfoSheetState.value.track != null) {
-                        _trackInfoSheetState.update {
-                            it.copy(
-                                track = _trackList.value.fastFirstOrNull { track -> it.track?.uri == track.uri }
-                            )
-                        }
-
-                        _playbackState.update {
-                            PlaybackState()
-                        }
-
-                        withContext(Dispatchers.Main) {
-                            player?.stop()
-                            player?.clearMediaItems()
-                        }
-                    }
-
+            trackRepository.getTracks().collect { tracks ->
+                _trackList.update {
+                    tracks.sortedBy(_trackSort.value, _trackSortOrder.value)
                 }
-                delay(5000L)
+
+                if (_trackInfoSheetState.value.track != null) {
+                    _trackInfoSheetState.update {
+                        it.copy(
+                            track = _trackList.value.fastFirstOrNull { track -> it.track?.uri == track.uri }
+                        )
+                    }
+
+                    _playbackState.update {
+                        PlaybackState()
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        player?.stop()
+                        player?.clearMediaItems()
+                    }
+                }
             }
         }
 

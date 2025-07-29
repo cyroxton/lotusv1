@@ -16,7 +16,8 @@ import java.io.File
 
 class MusicScanner(
     private val context: Context,
-    private val settings: Settings
+    private val settings: Settings,
+    private val trackRepository: com.dn0ne.player.app.data.repository.TrackRepository? = null
 ) {
     private val allowedExtensions = setOf("mp3", "wav", "aac", "flac", "ogg", "m4a")
 
@@ -115,6 +116,8 @@ class MusicScanner(
                     )
                 )
             }
+            // Notifier le TrackRepository que le cache doit être invalidé
+            trackRepository?.invalidateCache()
             onComplete()
         }
     }
@@ -170,6 +173,8 @@ class MusicScanner(
                     )
                 )
             }
+            // Notifier le TrackRepository que le cache doit être invalidé
+            trackRepository?.invalidateCache()
             onComplete()
         }
     }

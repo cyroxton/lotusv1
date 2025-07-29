@@ -975,6 +975,11 @@ fun MainPlayerScreen(
     onSettingsClick: () -> Unit
 ) {
     val context = LocalContext.current
+    
+    // Force recomposition à chaque mise à jour de la liste des tracks
+    LaunchedEffect(trackList) {
+        android.util.Log.d("MainPlayerScreen", "Tracks mis à jour: ${trackList.size}")
+    }
 
     var collapseFraction by remember {
         mutableFloatStateOf(0f)

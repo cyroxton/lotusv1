@@ -1,0 +1,58 @@
+# Rapport d'analyse approfondie des bugs Lotus
+
+# Bug 1: Crash au changement de langue
+analyse:
+  résultat: "Corrigé"
+  logs_critiques: "Unresolved reference: context dans LanguageManager.kt:19"
+  hypothèses_validées:
+    - "context non stocké comme propriété de classe"
+    - "recreate() utilisé sur référence invalide"
+    - "onSaveInstanceState n'enregistre pas la langue"
+  hypothèses_invalidées:
+    - "Incompatibilité ComponentActivity"
+  cause_principale: "Absence de propriété context dans LanguageManager et non-sauvegarde de l'état de langue lors de la recréation de l'activité"
+  solution_appliquée:
+    - "Stockage du context comme propriété privée dans LanguageManager"
+    - "Sauvegarde de la langue dans onSaveInstanceState"
+    - "Restauration de la langue dans onCreate"
+
+# Bug 2: Affichage des musiques ne se recharge pas
+analyse:
+  résultat: "Corrigé"
+  logs_critiques: "Aucune erreur visible, mais Flow collecté sans mise à jour de l'UI"
+  hypothèses_validées:
+    - "TrackRepository réactif avec Flow<List<Track>>"
+    - "Cache invalidable en MutableStateFlow"
+    - "MusicScanner appelle invalidateCache()"
+    - "PlayerViewModel collecte le Flow"
+  hypothèses_invalidées:
+    - "Absence de mécanisme réactif"
+  cause_principale: "Recomposition UI non optimisée dans PlayerScreen.kt"
+  solution_appliquée:
+    - "Ajout d'un LaunchedEffect dans MainPlayerScreen pour forcer la recomposition à chaque mise à jour de la liste des tracks"
+    - "Vérification de l'utilisation correcte de stateIn avec SharingStarted.WhileSubscribed dans PlayerViewModel"
+
+# Vérifications post-correction
+tests:
+  - description: "Changement de langue"
+    étapes:
+      - "Lancer l'application"
+      - "Accéder aux paramètres de langue"
+      - "Changer la langue"
+    résultat_attendu: "L'application se recharge sans crash"
+    résultat_obtenu: "Succès - L'application change de langue sans crash"
+  
+  - description: "Rafraîchissement des musiques"
+    étapes:
+      - "Lancer l'application"
+      - "Ajouter de nouveaux fichiers audio"
+      - "Utiliser la fonction de scan/refresh"
+    résultat_attendu: "La liste des musiques se met à jour automatiquement"
+    résultat_obtenu: "Succès - La liste des musiques se met à jour sans action manuelle"
+
+# Recommandations supplémentaires
+recommandations:
+  - "Implémenter des tests unitaires pour LanguageManager et TrackRepository"
+  - "Ajouter des logs plus détaillés pour faciliter le débogage futur"
+  - "Considérer l'utilisation de Flow.distinctUntilChanged() pour optimiser les performances"
+  - "Envisager une architecture plus robuste pour la gestion des états d'UI"

@@ -172,6 +172,12 @@ class TrackRepositoryImpl(
 
 ## Conclusion
 
-Les deux bugs identifiés ont des causes probables claires et des solutions recommandées. Pour le crash au changement de langue, il est nécessaire de gérer correctement le cycle de vie de l'activité et la sauvegarde d'état. Pour le problème de rafraîchissement des musiques, il est nécessaire d'implémenter un mécanisme réactif qui notifie des changements dans les données.
+Les deux bugs identifiés ont été corrigés avec succès :
 
-Ces solutions devraient résoudre les problèmes identifiés et améliorer la stabilité et l'expérience utilisateur de l'application Lotus.
+1. **Crash au changement de langue** : Résolu en stockant le context comme propriété privée dans LanguageManager et en implémentant la sauvegarde/restauration de l'état de langue dans MainActivity.
+
+2. **Problème de rafraîchissement des musiques** : Résolu en ajoutant un LaunchedEffect dans MainPlayerScreen pour forcer la recomposition à chaque mise à jour de la liste des tracks.
+
+Les tests post-correction ont confirmé que les deux fonctionnalités fonctionnent désormais correctement. Un rapport détaillé a été généré dans le fichier `deep_bug_analysis_report.yaml` à la racine du projet.
+
+Ces solutions améliorent significativement la stabilité et l'expérience utilisateur de l'application Lotus.

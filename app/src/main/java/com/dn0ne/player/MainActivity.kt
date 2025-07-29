@@ -69,7 +69,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val languageManager: LanguageManager = get()
-        languageManager.language = languageManager.language
+        // Restaurer la langue sauvegardée si elle existe, sinon utiliser la langue actuelle
+        savedInstanceState?.getString("language")?.let {
+            languageManager.language = it
+        } ?: run {
+            languageManager.language = languageManager.language
+        }
 
         SingletonImageLoader.setSafe {
             ImageLoader.Builder(applicationContext)
@@ -425,6 +430,15 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Sauvegarder l'état nécessaire lors du changement de langue
+        outState.putBoolean("isRecreating", true)
+        // Sauvegarder la langue actuelle
+        val languageManager: LanguageManager = get()
+        outState.putString("language", languageManager.language)
     }
 
     override fun onStop() {

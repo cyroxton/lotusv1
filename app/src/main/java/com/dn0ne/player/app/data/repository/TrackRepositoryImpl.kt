@@ -13,13 +13,40 @@ import androidx.core.database.getStringOrNull
 import androidx.media3.common.MediaItem
 import com.dn0ne.player.app.domain.track.Track
 import com.dn0ne.player.core.data.Settings
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.concurrent.TimeUnit
 
 class TrackRepositoryImpl(
     private val context: Context,
     private val settings: Settings,
 ) : TrackRepository {
-    override fun getTracks(): List<Track> {
+    
+    private val _tracksFlow = MutableStateFlow<List<Track>>(emptyList())
+    private var cachedTracks: List<Track>? = null
+    private var isCacheValid = false
+    
+    init {
+        // Initialiser le cache au démarrage
+        refreshTracks()
+    }
+    override fun getTracks(): Flow<List<Track>> {
+        // Retourner le flow directement
+        return _tracksFlow
+    }
+    
+    override fun invalidateCache() {
+        isCacheValid = false
+        refreshTracks()
+    }
+    
+    private fun refreshTracks() {
+        // Si le cache est valide, utiliser les données en cache
+        if (isCacheValid && cachedTracks != null) {
+            _tracksFlow.value = cachedTracks!!
+            return
+        }
+        
         val trackIdToGenre = getTrackIdToGenreMap()
 
         val collection =
@@ -170,8 +197,11 @@ class TrackRepositoryImpl(
                 )
             }
         }
-
-        return tracks
+        
+        // Mettre à jour le cache et le flow
+        cachedTracks = tracks
+        isCacheValid = true
+        _tracksFlow.value = tracks
     }
 
     override fun getFoldersWithAudio(): Set<String> {
