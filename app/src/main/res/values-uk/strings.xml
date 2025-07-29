@@ -329,4 +329,7 @@
 
     <string name="copy_error">Скопіювати помилку</string>
     <string name="select_all">Обрати всі</string>
+    <string name="favorites">Улюблене</string>
+    <string name="language_supporting_text">Змінити мову додатку</string>
+    <string name="language">Мова</string>
 </resources>

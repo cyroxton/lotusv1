@@ -201,8 +201,8 @@ fun Queue(
                 }
                 SearchField(
                     value = searchFieldValue,
-                    onValueChange = {
-                        searchFieldValue = it.trimStart()
+                    onValueChange = { newValue ->
+                        searchFieldValue = newValue.trimStart()
                     },
                     onClearClick = { searchFieldValue = "" },
                     modifier = Modifier

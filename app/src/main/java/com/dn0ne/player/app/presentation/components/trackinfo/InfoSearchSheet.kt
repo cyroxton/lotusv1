@@ -294,6 +294,7 @@ fun SearchField(
     onValueChange: (String) -> Unit,
     icon: ImageVector = Icons.Rounded.Search,
     placeholder: String = stringResource(R.string.search),
+    onClearClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(

@@ -1,72 +1,203 @@
-Analyse approfondie du projet Lotus - Music player for Android
-1. Présentation générale
-Lotus est un lecteur de musique open-source pour Android proposant une interface moderne et des fonctionnalités avancées pour la lecture locale de fichiers audio.
+# Analyse approfondie du projet Lotus - Lecteur de musique Android
 
-Langage principal : Kotlin
+## 1. Présentation générale
 
-Architecture : App Android classique avec Activity et Service pour la lecture en arrière-plan
+Lotus est un lecteur de musique open-source pour Android proposant une interface moderne et des fonctionnalités avancées pour la lecture locale de fichiers audio. Le projet utilise les technologies les plus récentes du développement Android et offre une expérience utilisateur riche et personnalisable.
 
-Licence : Apache-2.0
+- **Langage principal** : Kotlin
+- **Framework UI** : Jetpack Compose
+- **Architecture** : MVVM (Model-View-ViewModel) avec Activity et Service pour la lecture en arrière-plan
+- **Injection de dépendances** : Koin
+- **Gestion de données** : Realm
+- **Lecture audio** : Media3 (ExoPlayer)
 
-2. Structure du projet
-Fichiers clefs analysés :
-README.md : introduction au projet, objectifs et fonctionnalités principales
+## 2. Structure du projet
 
-libs.versions.toml : gestion des versions des dépendances via Gradle Version Catalogs
+### Organisation des packages
 
-app/build.gradle.kts : configuration Gradle Kotlin DSL, plugins, dépendances, paramètres de compilation
+Le projet est organisé en plusieurs packages principaux :
 
-MainActivity.kt : point d’entrée UI principal, gestion des interactions utilisateur avec la librairie Jetpack Compose
+- `com.dn0ne.player` : Package racine contenant les composants principaux
+  - `MainActivity.kt` : Point d'entrée UI principal avec Jetpack Compose
+  - `PlaybackService.kt` : Service de lecture audio en arrière-plan
+  - `PlayerApp.kt` : Classe Application pour l'initialisation
 
-PlaybackService.kt : service Android gérant la lecture audio en background, intégration avec MediaSession pour le contrôle à distance
+- `com.dn0ne.player.app` : Fonctionnalités principales de l'application
+  - `data` : Repositories et sources de données (lyrics, metadata)
+  - `domain` : Modèles et logique métier (playback, tracks, sorting)
+  - `presentation` : ViewModels et composants UI (PlayerViewModel, PlayerScreen)
 
-3. Fonctionnalités notables
-Lecture audio locale : gestion de nombreuses sources audio du stockage local
+- `com.dn0ne.player.core` : Fonctionnalités de base et utilitaires
+  - `data` : Gestion des paramètres et scan de musique
+  - `di` : Modules d'injection de dépendances
+  - `presentation` : Routes et détails de l'application
+  - `util` : Utilitaires divers
 
-Interface Jetpack Compose : UI moderne et réactive basée sur Compose, séparation claire des composants
+- `com.dn0ne.player.ui` : Thèmes et styles de l'interface utilisateur
+  - `theme` : Définition des couleurs, typographies et thèmes
 
-Service de lecture : architecture Service dédiée pour gérer la lecture, contrôle par notification persistante
+### Fichiers clés
 
-MediaSession & Notifications : intégration standard Android permettant contrôle via écran verrouillé et appareils externes
+- **AndroidManifest.xml** : Déclaration des composants, permissions et configurations
+- **build.gradle.kts** : Configuration Gradle avec Kotlin DSL, plugins et dépendances
+- **MainActivity.kt** : Gestion de l'UI, permissions et navigation
+- **PlaybackService.kt** : Service de lecture audio avec Media3 et égaliseur
+- **PlayerViewModel.kt** : Gestion de l'état de l'application et logique de présentation
+- **PlayerModule.kt** : Configuration de l'injection de dépendances avec Koin
 
-Gestion des playlists & files d’attente : support pour organiser et enchaîner les morceaux
+## 3. Fonctionnalités principales
 
-Thèmes et personnalisation : choix de thèmes sombres, personnalisation certains aspects visuels
+### Lecture audio
 
-Support multiformat : prise en charge de formats audio courants (mp3, flac, wav, etc.)
+- Support de multiples formats audio (MP3, FLAC, OGG, WAV)
+- Contrôles de lecture complets (play, pause, skip, seek)
+- Gestion des playlists et files d'attente
+- Égaliseur audio intégré avec préréglages
+- Minuterie de mise en veille
+- Persistance de l'état de lecture
 
-Tests unitaires & structure modulable : présence partielle de tests et architecture évolutive
+### Organisation de la bibliothèque
 
-4. Qualité du code et bonnes pratiques
-Usage moderne de Kotlin avec coroutines pour le traitement asynchrone
+- Navigation par pistes, albums, artistes, genres et dossiers
+- Création et gestion de playlists personnalisées
+- Marquage des pistes favorites
+- Options de tri multiples (titre, artiste, album, durée)
+- Recherche dans la bibliothèque
 
-Séparation claire entre UI (MainActivity) et backend audio (PlaybackService)
+### Métadonnées et paroles
 
-Utilisation correcte de Jetpack Compose pour la facilité de maintenance et tests d’UI
+- Récupération des métadonnées via MusicBrainz
+- Édition des métadonnées des pistes (tags ID3)
+- Synchronisation des paroles via l'API LRCLIB
+- Affichage des paroles synchronisées pendant la lecture
 
-Gestion fine des permissions Android (accès aux fichiers audio)
+### Interface utilisateur
 
-Bonne gestion des cycles de vie Android grâce à l’architecture Service et MediaSession
+- UI moderne avec Jetpack Compose
+- Support du thème Material You avec couleurs dynamiques
+- Animations fluides et transitions
+- Adaptabilité à différentes tailles d'écran
+- Contrôles accessibles et intuitifs
 
-Présence d’un fichier .toml pour versionnage fiable des dépendances
+## 4. Architecture technique
 
-Code bien commenté et structuré
+### Pattern MVVM
 
-5. Points d’amélioration potentiels
-La couverture des tests unitaires pourrait être étendue pour la partie lecture/service
+L'application suit le pattern MVVM (Model-View-ViewModel) :
+- **Model** : Repositories et sources de données (TrackRepository, LyricsRepository)
+- **View** : Composants Jetpack Compose (PlayerScreen)
+- **ViewModel** : Gestion de l'état et logique de présentation (PlayerViewModel)
 
-Documentation utilisateur plus détaillée dans le README sur l’architecture et la contribution
+### Injection de dépendances
 
-Ajout de plus de gestion d’erreurs notamment dans le service audio (ex : fichiers inexistants, erreurs I/O)
+Koin est utilisé pour l'injection de dépendances avec trois modules principaux :
+- `appModule` : Composants de base de l'application
+- `setupModule` : Configuration initiale
+- `playerModule` : Fonctionnalités du lecteur de musique
 
-Optimisation des performances pour grandes bibliothèques audio
+### Gestion des données
 
-Ajout possible d’une abstraction Repository pour accéder aux médias pour faciliter le test unitaire
+- **Realm** : Stockage local pour les paroles, playlists et favoris
+- **SharedPreferences** : Stockage des paramètres de l'application
+- **ContentResolver** : Accès aux fichiers média sur l'appareil
+- **Ktor** : Client HTTP pour les API externes (MusicBrainz, LRCLIB)
 
-6. Conclusion
-Lotus est un projet Android mature et bien conçu pour un lecteur de musique local, combinant les dernières technologies de développement Android (Kotlin, Compose, Services) avec une approche modulaire et évolutive. Son architecture est adaptée pour la maintenance et les contributions. Il constitue une excellente base pour étendre des fonctionnalités multimédia complexes sous Android.
+### Lecture audio
 
-Si tu souhaites je peux aussi t’aider à creuser des parties spécifiques du projet, ou faire une revue de code plus détaillée sur un fichier précis !
+- **Media3 (ExoPlayer)** : Moteur de lecture audio
+- **MediaSession** : Intégration avec le système Android pour les contrôles média
+- **EqualizerController** : Gestion de l'égaliseur audio
+- **SleepTimer** : Minuterie de mise en veille
 
-Enregistrez ce fil en tant qu’Espace
-Organisez vos recherches en sauvegardant le contexte pour de futures recherches
+## 5. Analyse du code
+
+### MainActivity.kt
+
+Point d'entrée principal qui gère :
+- Demande et vérification des permissions (READ_MEDIA_AUDIO, WRITE_EXTERNAL_STORAGE)
+- Configuration de l'UI avec Jetpack Compose
+- Navigation entre les écrans
+- Gestion des intents pour ouvrir des fichiers audio externes
+- Sélection de fichiers (cover art, dossiers, paroles, playlists)
+
+### PlaybackService.kt
+
+Service en arrière-plan qui gère la lecture audio avec :
+- Intégration avec MediaSessionService pour les contrôles système
+- Configuration d'ExoPlayer pour la lecture audio
+- Implémentation de l'égaliseur audio
+- Gestion de la minuterie de mise en veille
+- Libération des ressources lors de la destruction du service
+
+### PlayerViewModel.kt
+
+Gère l'état de l'application et la logique de présentation :
+- Maintien des listes de pistes (queue, albums, artistes, genres, dossiers)
+- Gestion de l'état de lecture (play, pause, seek)
+- Contrôle des playlists et favoris
+- Récupération et édition des métadonnées
+- Gestion des paroles synchronisées
+
+### PlayerModule.kt
+
+Configuration de l'injection de dépendances avec Koin :
+- Définition des repositories (TrackRepository, LyricsRepository, PlaylistRepository)
+- Configuration du client HTTP pour les API externes
+- Initialisation de la base de données Realm
+- Création des providers (MetadataProvider, LyricsProvider)
+- Injection du PlayerViewModel avec ses dépendances
+
+## 6. Qualité du code et bonnes pratiques
+
+### Points forts
+
+- Utilisation moderne de Kotlin avec coroutines et Flow pour les opérations asynchrones
+- Séparation claire des responsabilités (MVVM)
+- Architecture modulaire facilitant la maintenance et l'évolution
+- Gestion efficace des cycles de vie Android
+- Utilisation des dernières technologies (Jetpack Compose, Media3)
+- Code bien structuré et commenté
+
+### Points d'amélioration potentiels
+
+- La couverture des tests unitaires pourrait être étendue
+- Documentation plus détaillée sur l'architecture et les contributions
+- Gestion plus robuste des erreurs (fichiers corrompus, problèmes réseau)
+- Optimisation des performances pour les grandes bibliothèques
+- Abstraction supplémentaire pour certaines fonctionnalités (Repository pattern plus strict)
+
+## 7. Permissions et sécurité
+
+L'application requiert plusieurs permissions :
+- `READ_MEDIA_AUDIO` / `READ_EXTERNAL_STORAGE` : Accès aux fichiers audio
+- `WRITE_EXTERNAL_STORAGE` : Modification des métadonnées
+- `FOREGROUND_SERVICE` / `FOREGROUND_SERVICE_MEDIA_PLAYBACK` : Service de lecture en arrière-plan
+- `INTERNET` : Accès aux API externes (MusicBrainz, LRCLIB)
+
+La gestion des permissions est adaptative selon la version d'Android, avec des demandes explicites à l'utilisateur et des explications sur leur utilité.
+
+## 8. Dépendances principales
+
+- **AndroidX** : Composants de base Android
+- **Jetpack Compose** : Framework UI déclaratif
+- **Media3** : Lecture audio et contrôles média
+- **Koin** : Injection de dépendances
+- **Realm** : Base de données locale
+- **Ktor** : Client HTTP
+- **Kotlinx Serialization** : Sérialisation JSON
+- **Coil** : Chargement d'images
+- **JAudioTagger** : Lecture et écriture des métadonnées audio
+- **KMPalette** : Extraction des couleurs des pochettes d'album
+- **Reorderable** : Fonctionnalité de réorganisation des listes
+
+## 9. Conclusion
+
+Lotus est un projet Android mature et bien conçu qui démontre l'utilisation des meilleures pratiques et technologies modernes de développement Android. Son architecture MVVM avec injection de dépendances offre une base solide pour la maintenance et l'évolution futures.
+
+Les points forts du projet incluent :
+- Une interface utilisateur moderne et réactive avec Jetpack Compose
+- Une architecture claire et modulaire
+- L'utilisation efficace des API Android pour la lecture audio
+- Des fonctionnalités avancées comme la synchronisation des paroles et l'édition des métadonnées
+
+Le projet constitue une excellente référence pour les développeurs Android souhaitant créer des applications multimédia complexes et performantes.

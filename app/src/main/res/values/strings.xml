@@ -344,4 +344,5 @@
     <string name="favorites">Favorites</string>
     <string name="language_supporting_text">Change app language</string>
     <string name="language">Language</string>
+    <string name="language_changed">Language has been changed. The change will take effect after restarting the application.</string>
 </resources>

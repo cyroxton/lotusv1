@@ -1,0 +1,4 @@
+"Explique brièvement le raisonnement avant d’appliquer les changements."
+"Fournis du code complet, sans placeholders."
+"Ne modifie pas les fichiers non concernés."
+"Toujours privilégier la programmation fonctionnelle et Tailwind CSS."
