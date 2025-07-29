@@ -28,14 +28,13 @@
 - Enhance your listening experience with synchronized lyrics from [LRCLIB](https://lrclib.net/)
 - Manually update track details or fetch accurate info from [MusicBrainz](https://musicbrainz.org/)
 - Designed with [Material You](https://m3.material.io/) and supports dynamic color palettes
+ 
+## download
 
-## Download
-Latest stable version is available on [GitHub releases](https://github.com/dn0ne/lotus/releases/latest)
-
-Stable releases are also available on [F-Droid](https://f-droid.org/packages/com.dn0ne.lotus)
+[v1](https://github.com/cyroxton/lotusv1/releases/tag/v1.0)
 
 ## Support
-If you enjoy using Lotus, consider [buying me a coffee](https://en.liberapay.com/dn0ne/donate)!
+If you enjoy using Lotus, consider [buying me a coffee](https://coff.ee/cyroxton)!
 
 ## Build
 1. **Get the Source Code**  
@@ -57,6 +56,7 @@ If you enjoy using Lotus, consider [buying me a coffee](https://en.liberapay.com
 That's it! The app should now be running. 
 
 ## Credits
+the v0 provide from [dn0ne](https://github.com/dn0ne/lotus/tree/master)
 Some UI elements are inspired by [Vanilla](https://github.com/vanilla-music/vanilla)
 
 Lyrics UI is inspired by [Beautiful Lyrics](https://github.com/surfbryce/beautiful-lyrics)

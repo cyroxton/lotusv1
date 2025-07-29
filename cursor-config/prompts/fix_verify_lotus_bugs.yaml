@@ -1,0 +1,136 @@
+prompt_name: "Fix and Verify Lotus Bugs : Crash Langue & Refresh Musique"
+description: "Appliquer les corrections aux bugs critiques de Lotus et vérifier leur bon fonctionnement."
+context: |
+  Application : Lotus — lecteur musical Android codé en Kotlin avec Jetpack Compose, MVVM, Koin, Realm, et SharedPreferences.
+  Fonctionnalités clés : paramétrage des langues, affichage de la bibliothèque musicale, backend service audio.
+
+  🔧 Bug 1 : Crash au changement de langue
+  - Problème : L’application se ferme brutalement après un changement de langue via `LocalePicker`.
+  - Causes probables (d’après BUG_DIAGNOSIS.md) :
+    - Pas de recréation sécurisée après `AppCompatDelegate.setApplicationLocales()`.
+    - Perte de références d’objets lors de la recréation.
+    - Incompatibilité avec `ComponentActivity`.
+    - Absence de sauvegarde d’état.
+  - Modifications proposées :
+    - Ajouter `recreate()` dans `LanguageManager.kt`.
+    - Adapter pour `ComponentActivity` avec gestion manuelle du `Locale`.
+    - Implémenter `onSaveInstanceState` dans `MainActivity.kt`.
+
+  🔁 Bug 2 : Affichage des musiques ne se recharge pas
+  - Problème : Les musiques n’apparaissent pas sans actualisation manuelle.
+  - Causes probables (d’après BUG_DIAGNOSIS.md) :
+    - Pas de mécanisme réactif dans `TrackRepository`.
+    - `MusicScanner` ne notifie pas `TrackRepository`.
+    - Absence de cache d’invalidation.
+    - `StateFlow` mal configuré dans `PlayerViewModel`.
+  - Modifications proposées :
+    - Rendre `TrackRepository` réactif avec un `Flow`.
+    - Ajouter une notification dans `MusicScanner`.
+    - Implémenter un cache invalidable dans `TrackRepositoryImpl`.
+    - Mettre à jour `PlayerViewModel` avec `StateFlow`.
+
+instructions: |
+  - Étape 1 : Corriger le bug du crash langue
+    1. Ouvrir `LanguageManager.kt` et modifier la fonction `setLanguage` :
+       ```kotlin
+       fun setLanguage(context: Context, languageCode: String) {
+           prefs.edit().putString("language", languageCode).apply()
+           val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageCode)
+           AppCompatDelegate.setApplicationLocales(appLocale)
+           if (context is Activity) {
+               context.recreate() // Force la recréation sécurisée
+           }
+       }
+       ```
+    2. Dans `MainActivity.kt`, ajouter la gestion de l’état :
+       ```kotlin
+       override fun onSaveInstanceState(outState: Bundle) {
+           super.onSaveInstanceState(outState)
+           outState.putString("language", LanguageManager().language)
+       }
+       override fun onCreate(savedInstanceState: Bundle?) {
+           super.onCreate(savedInstanceState)
+           installSplashScreen()
+           enableEdgeToEdge()
+           val languageManager: LanguageManager = get()
+           savedInstanceState?.getString("language")?.let { languageManager.language = it }
+           languageManager.language = languageManager.language
+           // ...
+       }
+       ```
+    3. Vérification :
+       - Lancer l’app, changer la langue via `LanguageSettings.kt`, et vérifier dans Logcat qu’aucun crash n’apparaît (chercher `LocaleDebug` ou exceptions).
+       - Confirmer que l’UI se recharge correctement (ex. : texte en français si `fr` sélectionné).
+
+  - Étape 2 : Corriger le bug du refresh musique
+    1. Modifier `TrackRepository.kt` pour un `Flow` réactif :
+       ```kotlin
+       interface TrackRepository {
+           fun getTracks(): Flow<List<Track>>
+           fun getFoldersWithAudio(): Flow<Set<String>>
+       }
+       ```
+    2. Mettre à jour `TrackRepositoryImpl.kt` avec un cache invalidable :
+       ```kotlin
+       class TrackRepositoryImpl(
+           private val context: Context,
+           private val settings: Settings
+       ) : TrackRepository {
+           private val _tracks = MutableStateFlow<List<Track>>(emptyList())
+           override fun getTracks(): Flow<List<Track>> = _tracks.asStateFlow()
+
+           fun invalidateCache() {
+               viewModelScope.launch {
+                   _tracks.value = loadTracksFromMediaStore()
+               }
+           }
+
+           private fun loadTracksFromMediaStore(): List<Track> {
+               // Logique existante pour charger les pistes
+               return emptyList() // Remplace par ton code
+           }
+       }
+       ```
+    3. Modifier `MusicScanner.kt` pour notifier après scan :
+       ```kotlin
+       suspend fun refreshMedia(showMessages: Boolean = true, onComplete: () -> Unit = {}) {
+           // Scan des fichiers musicaux
+           trackRepository.invalidateCache() // Notifie le repository
+           onComplete()
+       }
+       ```
+    4. Mettre à jour `PlayerViewModel.kt` :
+       ```kotlin
+       val tracks = trackRepository.getTracks().stateIn(
+           scope = viewModelScope,
+           started = SharingStarted.WhileSubscribed(5000),
+           initialValue = emptyList()
+       )
+       ```
+    5. Vérification :
+       - Lancer l’app et vérifier dans Logcat que `MusicViewModel` émet des données (`Émission de musicList`).
+       - Ajouter un `LaunchedEffect` dans `MainScreen.kt` pour tester :
+         ```kotlin
+         LaunchedEffect(Unit) {
+             viewModel.tracks.collect { Log.d("MainScreen", "Rendu avec ${it.size} musiques") }
+         }
+         ```
+       - Confirmer que la `LazyColumn` affiche les musiques sans refresh manuel.
+
+  - Étape 3 : Valider les corrections
+    1. Compiler et tester :
+       - Exécuter `./gradlew.bat build` et vérifier “BUILD SUCCESSFUL”.
+       - Lancer l’app avec `./gradlew.bat installDebug` et tester les deux fonctionnalités.
+    2. Mettre à jour le rapport :
+       - Ajouter les résultats des vérifications dans `BUG_DIAGNOSIS.md` (succès/échec, logs pertinents).
+    3. Sauvegarder sur GitHub :
+       ```bash
+       git add .
+       git commit -m "fix: resolve crash langue and music refresh bugs based on diagnosis"
+       git pull origin main
+       git push origin main
+       ```
+
+parameters:
+  temperature: 0.3
+  max_tokens: 2048
