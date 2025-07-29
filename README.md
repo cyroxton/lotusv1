@@ -28,6 +28,10 @@
 - Enhance your listening experience with synchronized lyrics from [LRCLIB](https://lrclib.net/)
 - Manually update track details or fetch accurate info from [MusicBrainz](https://musicbrainz.org/)
 - Designed with [Material You](https://m3.material.io/) and supports dynamic color palettes
+ 
+## download
+
+[v1](https://github.com/cyroxton/lotusv1/releases/tag/v1.0)
 
 ## Support
 If you enjoy using Lotus, consider [buying me a coffee](https://coff.ee/cyroxton)!
